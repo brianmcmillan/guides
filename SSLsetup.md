@@ -6,10 +6,33 @@
 	`ls ~/.ssh`  
 	Should return a file named `id_rsa.pub`
 	If not, follow the instructions for generating an new key below. 
-2. Generate a new key-pair
+1. Generate a new key-pair (optional)
 This is not needed if you have an id_rsa.pub file.
 https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md
-`ssh-keygen -t rsa -C "brian.mcmillan.architect@gmail.com"`	
+`ssh-keygen -t rsa -b 2048 -C brian.mcmillan.architect@gmail.com -f devops_brianmcmillan`
+1. Enter a passphrase its should be log and memorable.  
+Results:
+
+```
+Your identification has been saved in devops_brianmcmillan.
+Your public key has been saved in devops_brianmcmillan.pub.
+The key fingerprint is:
+SHA256:l8NETDDKuacehbE8Ee7oSjIJ2GFgGiXbnxBXacYjvn4 brian.mcmillan.architect@gmail.com
+The key's randomart image is:
++---[RSA 2048]----+
+|+oo .oo.o+o      |
+|o* o.o*+ o.      |
+|o =. +B.  .      |
+|.o +.= * o .     |
+|o . +.B S =      |
+|.. ..  = . .     |
+|+ ... o          |
+| + ...E.         |
+|  .  ..          |
++----[SHA256]-----+
+```
+
+	
 3. Inspect your local key:
 	This isn't necessary but it is helpful to recognize what a key looks like.
 	`$ cat ~/.ssh/id_rsa.pub`  
@@ -40,25 +63,33 @@ https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md
 	`exit`
 3. Log in with SSH
 	`ssh pi@192.168.0.11`
+
+###Limit the groups that can login with SSH
+
 	
 ###Remove password based logins
 1. Open the SSH server configuration file for editing.
 	`sudo nano /etc/ssh/sshd_config`  
-2. Prevent the use of passwords  
+1. Change the default port to something that will not be used or not on this list (http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)
+	Change `Port 22` to `Port 49022`	
+1. Prevent root login  
+	Change `PermitRootLogin without-password` to `PermitRootLogin no`
+1. Prevent the use of passwords  
 	Change `#PasswordAuthentication yes` to `PasswordAuthentication no`
-3. Change the default port to something that will not be used or not on this list (http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)
-4. Change `Port 22` to `Port 49022`	
-5. Save the file. On the menu, this is WriteOut `^O`  
+
+
+1. Save the file. On the menu, this is WriteOut `^O`  
 	`[CTRL]+O` 
-4. 	Exit Nano  
+1. 	Exit Nano  
 	`[CTRL]+X`
-5. Reboot the server
+1. Reboot the server
 	`sudo reboot`
 	or 
 	`sudo /etc/init.d/ssh restart`
-6. Test passwordless login  
+1. Test passwordless login  
 	`ssh -p 49022 pi@192.168.0.11` should not require a password.  
 	`ssh -p 49022 root@192.168.0.11` should not work.
+
 
 
 

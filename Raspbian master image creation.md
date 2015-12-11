@@ -6,11 +6,10 @@
 ###Download an image
 1. Download and unzip an image  
 	Standard RPi Image Repository:  
-	https://www.raspberrypi.org/downloads/raspbian/
+	RASPBIAN JESSIE - https://www.raspberrypi.org/downloads/raspbian/
 
-	Minimal RPi images:  
-	http://dietpi.net    
-	http://www.alpinelinux.org/downloads/   
+	Minimal RPi image:  
+	RASPBIAN JESSIE LITE - https://www.raspberrypi.org/downloads/raspbian/  
 
 	Docker host image:  
 	http://blog.hypriot.com/downloads/
@@ -23,11 +22,12 @@
 ###Copy an image to an SD card
 1. Insert a SD card into your computer
 1. Find out the ID of the SD Card
-	`diskutil list` => /dev/disk3
+	`diskutil list` => /dev/disk1
 1. Unmount the SD Card
-	`diskutil unmountDisk /dev/disk3`
+	`diskutil unmountDisk /dev/disk1`
 1. Copy the image for the card
-	`sudo dd bs=1m if=/Users/brianmcmillan/Documents/systemimages/raspberrypi/src/2015-09-24-raspbian-jessie.img of=/dev/rdisk3`
+	`sudo dd bs=1m if=/Users/brianmcmillan/Documents/systemimages/raspberrypi/src/2015-11-21-raspbian-jessie-lite.img of=/dev/rdisk1`
+1. Wait for the process to finish
 
 ###Boot up the RPi
 1. Plug the SD card into the RPi and start the RPi
@@ -52,13 +52,13 @@ PORT   STATE SERVICE
 1. SSH into the RPi
 	`ssh pi@192.168.0.11`  
 	The default password is `raspberry`
-
-1. 	If the connection was successful, select `yes`
+Returns:
 ```
 The authenticity of host '192.168.0.11 (192.168.0.11)' can't be established.
 ECDSA key fingerprint is SHA256:kZ7NKj8+qFv...euWvgQAoNsZQaT94VQ.
 Are you sure you want to continue connecting (yes/no)? yes
 ```	
+1. 	If the connection was successful, select `yes`
 
 ####Login error message
 If another server has used this IP address before, you will need to remove that server fingerprint from the known hosts list.
@@ -78,13 +78,13 @@ IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
 1. SSH into the RPi
 	`ssh pi@192.168.0.11`  
 	The default password is `raspberry`
-1. Start the configuration application
+1. Start the configuration application  
 	`sudo raspi-config`
-1. Expand the file system on the card
+1. Expand the file system on the card  
 	Select menu choice `1. Expand Filesystem`
-1. Exit the config. application  
+1. Exit the config. application    
 	Use the tab key to select `<Finish>`
-1. Reboot the RPi
+1. Reboot the RPi  
 	`sudo reboot`
 
 ###Set configuration choices
@@ -1555,6 +1555,10 @@ EOT
 1. Update the apt package manager
 	`sudo apt-get update && apt-get dist-upgrade`
 	
+##Setting up automatic security updates (Optional)
+https://wiki.debian.org/UnattendedUpgrades  
+https://packages.debian.org/jessie/apt-listchanges	
+	
 ##Backing up the SD Card / Create the master image 
 https://www.raspberrypi.org/documentation/linux/filesystem/backup.md
 
@@ -1729,7 +1733,8 @@ https://samhobbs.co.uk/2013/12/raspberry-pi-email-server-part-1-postfix
 `make`
 `sudo make install`
 
-
+Statsd monitoring 
+https://anomaly.io/statsd-in-collectd/
 
 
 ###RTC
