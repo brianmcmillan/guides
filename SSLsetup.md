@@ -1,59 +1,81 @@
 #SSL Setup
 ##Preliminary steps
 ###Find your SSH key name
+The `id_rsa.pub` key can be used but it may be desirable to generate a new key specifically for system administration and development.
+
 1. Check for existing SSH keys  
 	Open a new terminal window to your Mac
 	`ls ~/.ssh`  
 	Should return a file named `id_rsa.pub`
-	If not, follow the instructions for generating an new key below. 
-1. Generate a new key-pair (optional)
-This is not needed if you have an id_rsa.pub file.
-https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md
-`ssh-keygen -t rsa -b 2048 -C brian.mcmillan.architect@gmail.com -f devops_brianmcmillan`
-1. Enter a passphrase its should be log and memorable.  
-Results:
-
-```
-Your identification has been saved in devops_brianmcmillan.
-Your public key has been saved in devops_brianmcmillan.pub.
-The key fingerprint is:
-SHA256:l8NETDDKuacehbE8Ee7oSjIJ2GFgGiXbnxBXacYjvn4 brian.mcmillan.architect@gmail.com
-The key's randomart image is:
-+---[RSA 2048]----+
-|+oo .oo.o+o      |
-|o* o.o*+ o.      |
-|o =. +B.  .      |
-|.o +.= * o .     |
-|o . +.B S =      |
-|.. ..  = . .     |
-|+ ... o          |
-| + ...E.         |
-|  .  ..          |
-+----[SHA256]-----+
-```
-
-	
-3. Inspect your local key:
+1. Inspect your local key:
 	This isn't necessary but it is helpful to recognize what a key looks like.
 	`$ cat ~/.ssh/id_rsa.pub`  
 	Returns:
-	`ssh-rsa AAAAB3Nza...Pb7p8etvB brianmcmillan@Brians-MacBook-Pro.local`  
+	`ssh-rsa AAAAB3Nza...N/ryTGNj brian.mcmillan.architect@gmail.com`
+
+###Generate a new DevOps key-pair (optional)
+This is not needed if you want to use your id_rsa.pub file.
+
+1. Open a terminal window on your mac.
+1. Generate a new key
+`ssh-keygen -t rsa -b 2048 -C brian.mcmillan.architect@gmail.com -f ~/.ssh/devops_brianmcmillan`
+1. Enter a passphrase its should be long and memorable.  
+Results:
+
+```
+Your identification has been saved in /Users/brianmcmillan/.ssh/devops_brianmcmillan.
+Your public key has been saved in /Users/brianmcmillan/.ssh/devops_brianmcmillan.pub.
+The key fingerprint is:
+SHA256:...
+brian.mcmillan.architect@gmail.com
+The key's randomart image is:
++---[RSA 2048]----+
+|ooo              |
+|++ + .           |
+...
+|=B=...           |
++----[SHA256]-----+
+```
+
+###Generate a new OpsAutomation key-pair (optional)
+This key will be used for later operations automation tasks.
+
+1. Open a terminal window on your mac.
+1. Generate a new key
+`ssh-keygen -t rsa -b 2048 -C brian.mcmillan.architect@gmail.com -f ~/.ssh/ops_auto`
+1. Enter a passphrase its should be long and memorable.  
+Results:
+
+```
+Your identification has been saved in /Users/brianmcmillan/.ssh/ops_auto.
+Your public key has been saved in /Users/brianmcmillan/.ssh/ops_auto.pub.
+The key fingerprint is:
+SHA256:...
+The key's randomart image is:
++---[RSA 2048]----+
+| .o .            |
+|.+ = o . .       |
+...
+|   .o.*o+.  o=o  |
++----[SHA256]-----+
+```	
+  
 
 ##Passwordless SSH logins
 ###Copy your key over to the server
 1. Open a terminal window on your Mac
-2. SSH into the RPi. This will open a new terminal window to the RPi.
+1. SSH into the RPi. This will open a new terminal window to the RPi.
 	`ssh pi@192.168.0.11`
-3. Create the SSH key directory on the RPi
+1. Create the SSH key directory on the RPi
 	`mkdir -p ~/.ssh`
-4. Switch back to the mac terminal window
-5. Copy the public key to the RPi
-	`cat ~/.ssh/id_rsa.pub | ssh pi@192.168.0.11 'cat >> .ssh/authorized_keys'`
-6. Switch back to the RPi terminal window
-7. Verify the key was added
+1. Switch back to the mac terminal window
+1. Copy the public key to the RPi
+	`cat ~/.ssh/devops_brianmcmillan.pub | ssh pi@192.168.0.11 'cat >> .ssh/authorized_keys'`
+1. Switch back to the RPi terminal window
+1. Verify the key was added
 `sudo cat ~/.ssh/authorized_keys`  
-`ls -l ~/.ssh`
-8. Set permissions on the directory and file
+`ls -lh ~/.ssh`
+1. Set permissions on the directory and file
 `sudo chmod 700 ~/.ssh`
 `sudo chmod 600 ~/.ssh/authorized_keys` 	
 
@@ -68,20 +90,16 @@ The key's randomart image is:
 
 	
 ###Remove password based logins
+
+
 1. Open the SSH server configuration file for editing.
-	`sudo nano /etc/ssh/sshd_config`  
-1. Change the default port to something that will not be used or not on this list (http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)
-	Change `Port 22` to `Port 49022`	
+	`sudo nano /etc/ssh/sshd_config`  	
 1. Prevent root login  
 	Change `PermitRootLogin without-password` to `PermitRootLogin no`
 1. Prevent the use of passwords  
 	Change `#PasswordAuthentication yes` to `PasswordAuthentication no`
 
 
-1. Save the file. On the menu, this is WriteOut `^O`  
-	`[CTRL]+O` 
-1. 	Exit Nano  
-	`[CTRL]+X`
 1. Reboot the server
 	`sudo reboot`
 	or 
@@ -112,3 +130,5 @@ https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
 https://dvpizone.wordpress.com/2014/03/02/how-to-connect-to-your-raspberry-pi-using-ssh-key-pairs/
 
 http://automationguy.co.uk/home-lab/home-lab-build-part-13-raspberry-pi-hardening/#more-365	
+
+https://www.raspberrypi.org/documentation/remote-access/ssh/unix.md

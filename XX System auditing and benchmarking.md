@@ -8,17 +8,19 @@
 1. Download the UnixBench application
 https://code.google.com/p/byte-unixbench/downloads/detail?name=UnixBench5.1.3.tgz&can=2&q=
 2. Copy the file from your laptop to the RPi
-`$ scp "/Users/brianmcmillan/Documents/Projects/System Auditing/UnixBench/UnixBench5.1.3.tar" pi@j8twmxx.local:~`
+`scp "/Users/brianmcmillan/Documents/Projects/System Auditing/UnixBench/UnixBench5.1.3.tar" pi@192.168.0.11:~`
+`scp foobar.txt your_username@remotehost.edu:/some/remote/directory
+
 3. Connect to the RPi
-`ssh pi@j8twmxx.local`
+`ssh pi@192.168.0.11`
 4. Open the source code directory
-`ls`
+`cd ~/ && ls`
 5. Untar the compressed file and open the directory
-`$ tar -xvf UnixBench5.1.3.tar && cd UnixBench`
+`tar -xvf UnixBench5.1.3.tar && cd UnixBench`
 6. Compile UnixBench
-`$ make`
+`make`
 7. Run the program
-`$ ./Run`
+`./Run`
 
 Returns:
 ```
