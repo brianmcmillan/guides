@@ -31,6 +31,7 @@ Uses the image created in Part 3 - Basic user security setup
 `admin ALL=(ALL) NOPASSWD: ALL`
 
 TEST THIS - `sudo echo 'admin ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers`
+ 
 
 ###Enable SSH access for this user
 1. Create the SSH key directory and file on the RPi
@@ -58,10 +59,14 @@ TEST THIS - `sudo echo 'admin ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers`
 
 ###Log in using the SSH key
 1. From the RPi terminal window
-2. 	Log out the pi@192.168.0.11 user  
+1. 	Log out the pi@192.168.0.11 user  
 	`exit`
-3. Log in with SSH
+1. Log in with SSH
 	`ssh -v admin@192.168.0.11`
+1. Set the user's umask for the group
+`umask 002`
+
+
 
 ###Issues
 1. Most issues have to do with setting the correct permissions
@@ -74,6 +79,9 @@ drwxr-xr-x 3 admin admin 4.0K Dec 13 21:19 ..
 -rw------- 1 admin admin  420 Dec 13 21:29 authorized_keys
 
 ```
+
+
+
 ###Disable the user pi
 1. Disable password login for the user account
 `sudo passwd -l pi`

@@ -1,5 +1,5 @@
 #Raspbian master image creation
-##Part 07 - System metrics collection
+##Part 08 - System metrics collection with Collectd
 ###Image requirements
 Uses the image created in Part 06 - Setting up monitoring
 ###Copy a master image to a new SD card (Optional)
@@ -12,22 +12,6 @@ Uses the image created in Part 06 - Setting up monitoring
 	`sudo dd bs=4m if=/Users/brianmcmillan/Documents/systemimages/raspberrypi/master/raspbian_<image>.img of=/dev/rdisk1`
 1. Unmount the SD Card
 `diskutil unmountDisk /dev/disk1`
-
----
-
-###NOT WORKING 2015-12-14
-###RPi Monitor (RPi Specific)
-1. Log in with the local host name
-`ssh admin@us1-bgwgc.local`
-1. Change to the root user
-`sudo -i`
-1. Install RPi Monitor
-`sudo apt-get install apt-transport-https ca-certificates`
-`sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 2C0D3C0F`
-`sudo apt-get update`
-`sudo apt-get install rpimonitor`
-1. Open the RPi Monitor web page
-http://us1-bgwgc.local:8888
 
 ---
 
@@ -45,7 +29,7 @@ http://oss.oetiker.ch/rrdtool/doc/index.en.html
 1. Replace the default file with the following
 
 ```
-cat <<EOT > /etc/collectd/collectd.conf
+sudo cat <<EOT > /etc/collectd/collectd.conf
 #################################################
 ## Collectd configuration file
 #################################################
@@ -1159,9 +1143,10 @@ EOT
 1. Remove any old data
 `sudo rm -r /var/lib/collectd/rrd/*`
 1. Start collectd
-`sudo /etc/init.d/collectd enable && sudo /etc/init.d/collectd start`
+`sudo /etc/init.d/collectd enable` 
+`sudo /etc/init.d/collectd start`
 1. Verify the creation of the RRD files
-`ls /var/lib/collectd/us1-n873h`
+`ls /var/lib/collectd/rrd/us1-bgwgc`
 
 ##Shutting down safely
 `sudo shutdown -h now` or `sudo halt`
@@ -1174,7 +1159,7 @@ EOT
 1. Find out the ID of the SD Card
 `diskutil list` => /dev/disk1
 1. Copy the image on the card to the computer
-`sudo dd bs=4m if=/dev/rdisk1 of=/Users/brianmcmillan/Documents/systemimages/raspberrypi/master/raspbian_lite_05.img`
+`sudo dd bs=4m if=/dev/rdisk1 of=/Users/brianmcmillan/Documents/systemimages/raspberrypi/master/raspbian_lite_08.img`
 1. Unmount the SD Card
 `diskutil unmountDisk /dev/disk1`
 
